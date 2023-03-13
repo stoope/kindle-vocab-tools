@@ -1,0 +1,46 @@
+{
+  "name": "kindle-vocab-tools",
+  "version": "1.0.0",
+  "description": "Set of tools to work with Kindle Vocabulary Builder",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "keywords": [
+    "kindle",
+    "vocabulary",
+    "words"
+  ],
+  "author": "Stepan Kurennykh",
+  "homepage": "https://github.com/stoope/kindle-vocab-tools",
+  "license": "ISC",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "prettier": "^2.8.4",
+    "typescript": "^4.9.5"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "engines": {
+    "node": ">=16",
+    "npm": ">=8"
+  },
+  "volta": {
+    "node": "16.19.1"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.4"
+  }
+}
