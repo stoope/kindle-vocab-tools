@@ -47,8 +47,39 @@ Returns all the books.
 
 Returns all the lookups.
 
-### `getLookupsByBook(bookId: string): Promise<Lookup[]>`
+### `getLookupsByBookId(bookId: string): Promise<Lookup[]>`
 
 Returns all the lookups for a specific book.
+
+`bookId` could be found as `id` prop of `Book` type
+
+### `deleteBookWithLookups(bookId: string): Promise<void>`
+
+Deletes book and all the lookups connected with it.
+
+### `deleteWords(): Promise<void>`
+
+Deletes all words.
+
+### `deleteWordsByBookId(bookId: string): Promise<void>`
+
+Deletes words by `bookId`.
+
+### `deleteBookById(bookId: string): Promise<void>`
+
+Deletes a book.
+`bookId` could be found as `id` prop of `Book` type
+
+### `deleteLookups(): Promise<void>`
+
+Deletes all lookups.
+
+### `deleteLookupsById(id: string): Promise<void>`
+
+Deletes lookups by `id`.
+
+### `deleteLookupsByBookId(bookId: string): Promise<void>`
+
+Deletes lookups by `bookId`.
 
 `bookId` could be found as `id` prop of `Book` type

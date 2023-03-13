@@ -70,9 +70,8 @@ export default class KindleVocabTools {
 
     return new Promise<Lookup[]>((resolve, reject) => {
       this.db?.all(
-        `SELECT word_key, usage, LOOKUPS.timestamp, WORDS.word, WORDS.stem, BOOK_INFO.title AS book_title FROM LOOKUPS
+        `SELECT word_key, usage, LOOKUPS.timestamp, WORDS.word, WORDS.stem FROM LOOKUPS
         INNER JOIN WORDS on WORDS.id=LOOKUPS.word_key
-        INNER JOIN BOOK_INFO on LOOKUPS.book_key=BOOK_INFO.id
         ORDER BY LOOKUPS.timestamp`,
         (err, rows) => {
           if (err) {
@@ -89,7 +88,7 @@ export default class KindleVocabTools {
    * Returns all the lookups for a specific book.
    * @param bookId id of the book. Could be found as `id` prop of `Book` type
    */
-  public async getLookupsByBook(bookId: string) {
+  public async getLookupsByBookId(bookId: string) {
     this.checkInit();
 
     return new Promise<Lookup[]>((resolve, reject) => {
@@ -97,7 +96,7 @@ export default class KindleVocabTools {
         `SELECT word_key, usage, LOOKUPS.timestamp, WORDS.word, WORDS.stem, BOOK_INFO.title AS book_title FROM LOOKUPS
         INNER JOIN WORDS on WORDS.id=LOOKUPS.word_key
         INNER JOIN BOOK_INFO on LOOKUPS.book_key=BOOK_INFO.id
-        WHERE lookups.book_key="${bookId}"
+        WHERE LOOKUPS.book_key="${bookId}"
         ORDER BY LOOKUPS.timestamp`,
         (err, rows) => {
           if (err) {
@@ -124,6 +123,157 @@ export default class KindleVocabTools {
             reject(err);
           } else {
             resolve(rows);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Deletes book and all the lookups connected with it.
+   * @param bookId id of the book. Could be found as `id` prop of `Book` type
+   */
+  public async deleteBookWithLookups(bookId: string) {
+    this.checkInit();
+
+    await this.deleteWordsByBookId(bookId);
+    await this.deleteLookupsByBookId(bookId);
+    await this.deleteBookById(bookId);
+  }
+
+  /**
+   * Deletes all words.
+   */
+  public async deleteWords() {
+    this.checkInit();
+
+    return new Promise<void>((resolve, reject) => {
+      this.db?.all(`DELETE FROM WORDS`, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  /**
+   * Deletes words by `bookId`.
+   * @param bookId id of the book. Could be found as `id` prop of `Book` type
+   */
+  public async deleteWordsByBookId(bookId: string) {
+    this.checkInit();
+
+    return new Promise<void>((resolve, reject) => {
+      this.db?.all(
+        `DELETE FROM WORDS
+        WHERE id IN ( SELECT word_key from LOOKUPS WHERE LOOKUPS.book_key="${bookId}")`,
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Deletes all books.
+   */
+  public async deleteBooks() {
+    this.checkInit();
+
+    return new Promise<void>((resolve, reject) => {
+      this.db?.all(`DELETE FROM BOOK_INFO`, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  /**
+   * Deletes a book.
+   * @param bookId id of the book. Could be found as `id` prop of `Book` type
+   */
+  public async deleteBookById(bookId: string) {
+    this.checkInit();
+
+    return new Promise<void>((resolve, reject) => {
+      this.db?.all(
+        `DELETE FROM BOOK_INFO
+        WHERE BOOK_INFO.id="${bookId}"`,
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Deletes all lookups.
+   */
+  public async deleteLookups() {
+    this.checkInit();
+
+    return new Promise<void>((resolve, reject) => {
+      this.db?.all(`DELETE FROM LOOKUPS`, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  /**
+   * Deletes lookups by `id`.
+   * @param id id of the lookup
+   */
+  public async deleteLookupsById(id: string) {
+    this.checkInit();
+
+    return new Promise<void>((resolve, reject) => {
+      this.db?.all(
+        `DELETE FROM LOOKUPS
+        WHERE LOOKUPS.id="${id}"`,
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Deletes lookups by `bookId`.
+   * @param bookId id of the book. Could be found as `id` prop of `Book` type
+   */
+  public async deleteLookupsByBookId(bookId: string) {
+    this.checkInit();
+
+    return new Promise<void>((resolve, reject) => {
+      this.db?.all(
+        `DELETE FROM LOOKUPS
+        WHERE LOOKUPS.book_key="${bookId}"`,
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
           }
         }
       );
