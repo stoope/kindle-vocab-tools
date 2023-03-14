@@ -1,6 +1,6 @@
 {
   "name": "kindle-vocab-tools",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Set of tools to work with Kindle Vocabulary Builder",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

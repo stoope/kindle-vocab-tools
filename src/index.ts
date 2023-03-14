@@ -237,10 +237,10 @@ export default class KindleVocabTools {
   }
 
   /**
-   * Deletes lookups by `id`.
+   * Deletes lookup by `id`.
    * @param id id of the lookup
    */
-  public async deleteLookupsById(id: string) {
+  public async deleteLookupById(id: string) {
     this.checkInit();
 
     return new Promise<void>((resolve, reject) => {

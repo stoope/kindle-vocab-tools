@@ -74,9 +74,9 @@ Deletes a book.
 
 Deletes all lookups.
 
-### `deleteLookupsById(id: string): Promise<void>`
+### `deleteLookupById(id: string): Promise<void>`
 
-Deletes lookups by `id`.
+Deletes lookup by `id`.
 
 ### `deleteLookupsByBookId(bookId: string): Promise<void>`
 
